@@ -24,11 +24,13 @@ jobs:
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
       - name: Run build
-        run:  npm run build
+        run:  npm run build:prod
       
       - name: Deploy to gh pages
-        run:  npx angular-cli-ghpages --dir=dist/cicdAngular
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          builder_dir:  dist/angularcicd
         env:
           CI: true
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           
