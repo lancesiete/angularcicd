@@ -26,10 +26,12 @@ jobs:
       - name: Run build
         run:  npm run build:prod
       
-      - name: Deploy to gh pages
-        uses: crazy-max/ghaction-github-pages@v3.1.0
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
         with:
-          build_dir:  dist/angularcicd
+          target_branch: gh-pages
+          build_dir: public
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
