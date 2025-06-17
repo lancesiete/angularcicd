@@ -25,6 +25,9 @@ jobs:
       - name: Run build
         run:  npm run build:prod
       
+      - name: Rename index for routing
+        run: mv dist/cicdAngular/index.html dist/cicdAngular/404.html
+      
       - name: Deploy to GitHub Pages
         if: success()
         uses: crazy-max/ghaction-github-pages@v2
