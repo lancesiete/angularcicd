@@ -1,35 +1,39 @@
-name: CI
+name: CICD Pipeline
 
 on: 
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs:
   deploy:
     runs-on: ubuntu-22.04
     steps:
+      # clonamos el proyecto
       - name: Clone
         uses: actions/checkout@v2
-
+      # Instalamos el node con la version correspondiente
       - name: Use Node.js 16.X
         uses: actions/setup-node@v2
         with:
           node-version: 16.X
-
+      # Instalamos las dependencias del proyecto
       - name: Install dependencies
         run: npm ci
-
+      # Corremos los test
       - name: Run test
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-
+      # Hacemos el build
       - name: Run build
         run:  npm run build:prod
-      
+      # Renombramos el archivo index.html a 404.html para evitar el error 404
       - name: Rename index for routing
         run: mv dist/cicdAngular/index.html dist/cicdAngular/404.html
-      
+      # Hacemos el deploy a github pages
       - name: Deploy to GitHub Pages
-        if: success()
+        if: ${{ github.event_name == 'push' }}
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
