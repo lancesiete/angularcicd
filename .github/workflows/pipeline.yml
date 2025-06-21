@@ -34,8 +34,8 @@ jobs:
         run: npm ci
       - uses: actions/download-artifact@v4
         with:
-          name: dist
-          path: dist
+          name: dist/cicdAngular
+          path: dist/cicdAngular
       - name: Run test
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
@@ -61,8 +61,8 @@ jobs:
         run: mv dist/cicdAngular/index.html dist/cicdAngular/404.html
       - uses: actions/upload-artifact@v4
         with: 
-          name: dist
-          path: dist
+          name: dist/cicdAngular
+          path: dist/cicdAngular
 
   deploy:
     needs: [test]
@@ -74,7 +74,7 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
-          build_dir: dist
+          build_dir: dist/cicdAngular
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
