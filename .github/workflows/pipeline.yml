@@ -2,10 +2,10 @@ name: CICD Pipeline
 
 on: 
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
-    types: [opened, synchronize]
+    branches: [ main ]
+    types: [ opened, synchronize ]
 
 jobs:
 
@@ -16,6 +16,8 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
+    
+      
 
   test:
     needs: [ build ]
@@ -23,7 +25,7 @@ jobs:
     steps:
       # clonamos el proyecto
       - name: Clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # Instalamos el node con la version correspondiente
       - name: Use Node.js 16.X
         uses: actions/setup-node@v2
@@ -39,12 +41,13 @@ jobs:
       - name: Run test
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
+
   build:
     runs-on: ubuntu-22.04
     steps:
       # clonamos el proyecto
       - name: Clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # Instalamos el node con la version correspondiente
       - name: Use Node.js 16.X
         uses: actions/setup-node@v2
@@ -64,8 +67,9 @@ jobs:
           name: dist
           path: dist
 
+
   deploy:
-    needs: [test]
+    needs: [ test ]
     runs-on: ubuntu-22.04
     steps:
       # Hacemos el deploy a github pages
@@ -74,7 +78,7 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
-          build_dir: dist
+          build_dir: dist/cicdAngular
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
