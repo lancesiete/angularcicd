@@ -32,7 +32,7 @@ jobs:
       # Instalamos las dependencias del proyecto
       - name: Install dependencies
         run: npm ci
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
@@ -59,7 +59,7 @@ jobs:
       # Renombramos el archivo index.html a 404.html para evitar el error 404
       - name: Rename index for routing
         run: mv dist/cicdAngular/index.html dist/cicdAngular/404.html
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with: 
           name: dist
           path: dist
