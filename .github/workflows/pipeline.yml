@@ -24,8 +24,6 @@ jobs:
       # clonamos el proyecto
       - name: Clone
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       # Instalamos el node con la version correspondiente
       - name: Use Node.js 16.X
         uses: actions/setup-node@v2
