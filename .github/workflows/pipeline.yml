@@ -16,9 +16,11 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
+    
+      
 
-  
-  install:
+  test:
+    needs: [ build ]
     runs-on: ubuntu-22.04
     steps:
       # clonamos el proyecto
@@ -32,10 +34,6 @@ jobs:
       # Instalamos las dependencias del proyecto
       - name: Install dependencies
         run: npm ci
-      
-
-  test:
-    needs: [ build, install ]
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/download-artifact@v4
@@ -47,9 +45,19 @@ jobs:
 
 
   build:
-    needs: install
     runs-on: ubuntu-22.04
     steps:
+      # clonamos el proyecto
+      - name: Clone
+        uses: actions/checkout@v3
+      # Instalamos el node con la version correspondiente
+      - name: Use Node.js 16.X
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.X
+      # Instalamos las dependencias del proyecto
+      - name: Install dependencies
+        run: npm ci
       # Hacemos el build
       - name: Run build
         run:  npm run build:prod
