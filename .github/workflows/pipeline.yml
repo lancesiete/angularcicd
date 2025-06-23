@@ -78,7 +78,7 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
-          build_dir: dist/cicdAngular
+          build_dir: cicdAngular
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
