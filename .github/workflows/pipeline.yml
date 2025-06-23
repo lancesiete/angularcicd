@@ -16,6 +16,32 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
+
+  
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      # clonamos el proyecto
+      - name: Clone
+        uses: actions/checkout@v3
+      # Instalamos el node con la version correspondiente
+      - name: Use Node.js 16.X
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.X
+      # Instalamos las dependencias del proyecto
+      - name: Install dependencies
+        run: npm ci
+      # Hacemos el build
+      - name: Run build
+        run:  npm run build:prod
+      # Renombramos el archivo index.html a 404.html para evitar el error 404
+      - name: Rename index for routing
+        run: mv dist/cicdAngular/index.html dist/cicdAngular/404.html
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: dist
+          path: dist
     
       
 
@@ -42,46 +68,19 @@ jobs:
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
 
-  build:
-    runs-on: ubuntu-22.04
-    steps:
-      # clonamos el proyecto
-      - name: Clone
-        uses: actions/checkout@v3
-      # Instalamos el node con la version correspondiente
-      - name: Use Node.js 16.X
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.X
-      # Instalamos las dependencias del proyecto
-      - name: Install dependencies
-        run: npm ci
-      # Hacemos el build
-      - name: Run build
-        run:  npm run build:prod
-      # Renombramos el archivo index.html a 404.html para evitar el error 404
-      - name: Rename index for routing
-        run: mv dist/cicdAngular/index.html dist/cicdAngular/404.html
-      - uses: actions/upload-artifact@v4
-        with: 
-          name: dist
-          path: dist
-
-
+  
   deploy:
     needs: [ test ]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
       # Hacemos el deploy a github pages
       - name: Deploy to GitHub Pages
         if: ${{ github.event_name == 'push' }}
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
-          build_dir: dist/cicdAngular
+          build_dir: cicdAngular
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
