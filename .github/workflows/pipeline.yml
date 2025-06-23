@@ -72,13 +72,16 @@ jobs:
     needs: [ test ]
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       # Hacemos el deploy a github pages
       - name: Deploy to GitHub Pages
         if: ${{ github.event_name == 'push' }}
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: gh-pages
-          build_dir: cicdAngular
+          build_dir: dist/cicdAngular
         env:
           GITHUB_TOKEN: ${{ github.token }}
           
